@@ -5,7 +5,7 @@
 
 // configurable parameters
 #define SND_VEL 346.0     // sound velocity at 24 celsius degree (unit: m/sec)
-#define INTERVAL 100      // sampling interval (unit: msec)
+#define INTERVAL 25   // sampling interval (unit: msec)
 #define PULSE_DURATION 10 // ultra-sound Pulse Duration (unit: usec)
 #define _DIST_MIN 100.0   // minimum distance to be measured (unit: mm)
 #define _DIST_MAX 300.0   // maximum distance to be measured (unit: mm)
@@ -39,12 +39,21 @@ void loop() {
 
   if (distance < _DIST_MIN) {
     distance = _DIST_MIN - 10.0;    // Set Lower Value
-    digitalWrite(PIN_LED, 1);       // LED OFF
+    analogWrite(9,255);
+    //digitalWrite(PIN_LED, 1);       // LED OFF
   } else if (distance > _DIST_MAX) {
     distance = _DIST_MAX + 10.0;    // Set Higher Value
-    digitalWrite(PIN_LED, 1);       // LED OFF
-  } else {    // In desired Range
-    digitalWrite(PIN_LED, 0);       // LED ON      
+    analogWrite(9,255);
+    //digitalWrite(PIN_LED, 1);       // LED OFF
+  }
+  else if (distance > _DIST_MAX *0.5  && distance < _DIST_MAX *0.83) {
+    distance = _DIST_MAX + 10.0;    // Set Higher Value
+    analogWrite(9,255*0.5);
+    //digitalWrite(PIN_LED, 1);       // LED OFF
+  } 
+  else {    // In desired Range
+    analogWrite(9,0);
+    //digitalWrite(PIN_LED, 0);       // LED ON      
   }
 
   // output the distance to the serial port
@@ -54,7 +63,7 @@ void loop() {
   Serial.println("");
   
   // do something here
-  delay(50); // Assume that it takes 50ms to do something.
+  //delay(50); // Assume that it takes 50ms to do something.
   
   // update last sampling time
   last_sampling_time += INTERVAL;
